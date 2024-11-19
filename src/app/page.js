@@ -23,7 +23,7 @@ export default function LoginForm() {
       return navigate(routes.moderator)
     }
 
-    return navigate(routes.home)
+    return navigate(routes.torneosDivisiones)
   }
 
   return (
@@ -84,6 +84,10 @@ export default function LoginForm() {
               </button>
             </div>
           </div>
+
+          <Link href={routes.torneosDivisiones} className="text-sm text-indigo-600 hover:text-indigo-500 mt-2">
+            Ingresar como invitado
+          </Link>
 
           <div className="flex flex-col">
             <div className="flex items-center">
