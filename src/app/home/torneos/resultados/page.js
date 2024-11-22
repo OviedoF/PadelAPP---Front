@@ -1,78 +1,136 @@
 'use client'
 
 import { useState } from 'react'
-import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch, FaVenusMars } from 'react-icons/fa'
+import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch, FaVenusMars, FaInfoCircle, FaListAlt } from 'react-icons/fa'
 import Nav from '../../Navbar'
+import Image from 'next/image'
 
 // Datos de ejemplo actualizados para incluir la categoría de género
 const torneosResultados = [
     {
         id: 1,
-        nombre: "Torneo Madrid Open",
+        nombre: "CC BNK HOLDING",
         fecha: "2024-03-15",
         ubicacion: "Madrid",
         categoria: "Primera División",
         genero: "Masculino",
+        estado: "COMPLETED",
+        hora: "01:19",
         resultados: [
-            { posicion: 1, equipo: "Padel Pro Madrid", puntos: 1000 },
-            { posicion: 2, equipo: "Barcelona Stars", puntos: 750 },
-            { posicion: 3, equipo: "Valencia Aces", puntos: 500 },
-            { posicion: 4, equipo: "Sevilla Smash", puntos: 250 },
+            {
+                equipo1: {
+                    nombre: "A. Coello",
+                    pais: "ARG",
+                    bandera: "/ARG.jpg"
+                },
+                equipo2: {
+                    nombre: "A. Tapia",
+                    pais: "ESP",
+                    bandera: "/ESP.jpg"
+                },
+                sets: [
+                    { equipo1: 6, equipo2: 6 },
+                    { equipo1: 4, equipo2: 2 }
+                ]
+            },
+            {
+                equipo1: {
+                    nombre: "F. Stupaczuk",
+                    pais: "ARG",
+                    bandera: "/ARG.jpg"
+                },
+                equipo2: {
+                    nombre: "M. Yanguas",
+                    pais: "ESP",
+                    bandera: "/ESP.jpg"
+                },
+                sets: [
+                    { equipo1: 7, equipo2: 7 },
+                    { equipo1: 5, equipo2: 6 }
+                ]
+            }
         ]
     },
     {
         id: 2,
-        nombre: "Barcelona Padel Cup",
-        fecha: "2024-03-22",
+        nombre: "Grand Slam Masters",
+        fecha: "2024-04-20",
         ubicacion: "Barcelona",
         categoria: "Segunda División",
         genero: "Femenino",
+        estado: "IN_PROGRESS",
+        hora: "15:30",
         resultados: [
-            { posicion: 1, equipo: "Girona Padel Club", puntos: 800 },
-            { posicion: 2, equipo: "Lleida Legends", puntos: 600 },
-            { posicion: 3, equipo: "Tarragona Team", puntos: 400 },
-            { posicion: 4, equipo: "Sabadell Slammers", puntos: 200 },
+            {
+                equipo1: {
+                    nombre: "M. Sanchez",
+                    pais: "ESP",
+                    bandera: "/ESP.jpg"
+                },
+                equipo2: {
+                    nombre: "L. García",
+                    pais: "ARG",
+                    bandera: "/ARG.jpg"
+                },
+                sets: [
+                    { equipo1: 6, equipo2: 4 },
+                    { equipo1: 7, equipo2: 5 }
+                ]
+            }
         ]
     },
     {
         id: 3,
-        nombre: "Valencia Padel Masters",
-        fecha: "2024-04-01",
-        ubicacion: "Valencia",
+        nombre: "Pro Challenge Series",
+        fecha: "2024-05-10",
+        ubicacion: "Lisboa",
         categoria: "Primera División",
         genero: "Masculino",
-        resultados: [
-            { posicion: 1, equipo: "Valencia Victors", puntos: 1000 },
-            { posicion: 2, equipo: "Alicante Aces", puntos: 750 },
-            { posicion: 3, equipo: "Castellón Crushers", puntos: 500 },
-            { posicion: 4, equipo: "Elche Eagles", puntos: 250 },
-        ]
+        estado: "PENDING",
+        hora: "18:45",
+        resultados: []
     },
     {
         id: 4,
-        nombre: "Sevilla Padel Championship",
-        fecha: "2024-04-10",
-        ubicacion: "Sevilla",
-        categoria: "Tercera División",
+        nombre: "Elite International Cup",
+        fecha: "2024-06-01",
+        ubicacion: "París",
+        categoria: "Primera División",
         genero: "Femenino",
+        estado: "COMPLETED",
+        hora: "10:00",
         resultados: [
-            { posicion: 1, equipo: "Sevilla Strikers", puntos: 600 },
-            { posicion: 2, equipo: "Córdoba Chargers", puntos: 450 },
-            { posicion: 3, equipo: "Huelva Hammers", puntos: 300 },
-            { posicion: 4, equipo: "Cádiz Crushers", puntos: 150 },
+            {
+                equipo1: {
+                    nombre: "S. Martínez",
+                    pais: "ARG",
+                    bandera: "/ARG.jpg"
+                },
+                equipo2: {
+                    nombre: "C. López",
+                    pais: "ARG",
+                    bandera: "/ARG.jpg"
+                },
+                sets: [
+                    { equipo1: 6, equipo2: 3 },
+                    { equipo1: 6, equipo2: 4 }
+                ]
+            }
         ]
-    },
-]
+    }
+];
+
 
 export default function TorneosResultados() {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedTorneo, setSelectedTorneo] = useState(null)
     const [generoFilter, setGeneroFilter] = useState('Todos')
+    const [activeTab, setActiveTab] = useState('overview')
 
     const filteredTorneos = torneosResultados.filter(torneo =>
         (torneo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        torneo.ubicacion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        torneo.categoria.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            torneo.ubicacion.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            torneo.categoria.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (generoFilter === 'Todos' || torneo.genero === generoFilter)
     )
 
@@ -140,9 +198,10 @@ export default function TorneosResultados() {
                                 ))}
                             </div>
 
+
                             {selectedTorneo && (
                                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-                                    <div className="relative bg-white rounded-lg shadow-xl p-8 m-4 max-w-xl w-full">
+                                    <div className="relative bg-white rounded-lg shadow-xl p-8 m-4 max-w-2xl w-full">
                                         <button
                                             className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
                                             onClick={() => setSelectedTorneo(null)}
@@ -151,41 +210,159 @@ export default function TorneosResultados() {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </button>
-                                        <h2 className="text-2xl font-bold mb-4 text-cyan-600">{selectedTorneo.nombre}</h2>
-                                        <p className="text-gray-600 flex items-center mb-2">
-                                            <FaCalendarAlt className="mr-2 text-cyan-500" />
-                                            {new Date(selectedTorneo.fecha).toLocaleDateString()}
-                                        </p>
-                                        <p className="text-gray-600 flex items-center mb-2">
-                                            <FaMapMarkerAlt className="mr-2 text-cyan-500" />
-                                            {selectedTorneo.ubicacion}
-                                        </p>
-                                        <p className="text-gray-600 flex items-center mb-2">
-                                            <FaTrophy className="mr-2 text-cyan-500" />
-                                            {selectedTorneo.categoria}
-                                        </p>
-                                        <p className="text-gray-600 flex items-center mb-4">
-                                            <FaVenusMars className="mr-2 text-cyan-500" />
-                                            {selectedTorneo.genero}
-                                        </p>
-                                        <h3 className="text-xl font-semibold mb-2">Resultados</h3>
-                                        <ul className="space-y-2">
-                                            {selectedTorneo.resultados.map((resultado) => (
-                                                <li key={resultado.posicion} className="flex items-center justify-between bg-gray-100 p-2 rounded">
-                                                    <span className="flex items-center">
-                                                        <FaMedal className={`mr-2 ${resultado.posicion === 1 ? 'text-yellow-500' :
-                                                                resultado.posicion === 2 ? 'text-gray-400' :
-                                                                    resultado.posicion === 3 ? 'text-yellow-700' : 'text-gray-500'
-                                                            }`} />
-                                                        {resultado.equipo}
-                                                    </span>
-                                                    <span className="font-semibold">{resultado.puntos} pts</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+
+                                        <h2 className="text-2xl font-bold mb-6 text-cyan-600">{selectedTorneo.nombre}</h2>
+
+                                        {/* Tabs */}
+                                        <div className="flex mb-6 border-b">
+                                            <button
+                                                className={`flex items-center px-4 py-2 ${activeTab === 'overview'
+                                                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                                                    : 'text-gray-500'}`}
+                                                onClick={() => setActiveTab('overview')}
+                                            >
+                                                <FaInfoCircle className="mr-2" />
+                                                Overview
+                                            </button>
+                                            <button
+                                                className={`flex items-center px-4 py-2 ${activeTab === 'resultados'
+                                                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                                                    : 'text-gray-500'}`}
+                                                onClick={() => setActiveTab('resultados')}
+                                            >
+                                                <FaListAlt className="mr-2" />
+                                                Resultados
+                                            </button>
+                                        </div>
+
+                                        {/* Overview Tab Content */}
+                                        {activeTab === 'overview' && (
+                                            <div className="space-y-4">
+                                                <div className="bg-gray-50 p-4 rounded-lg">
+                                                    <h3 className="font-semibold text-lg mb-3 text-gray-800">Información General</h3>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <p className="text-gray-600 flex items-center mb-2">
+                                                                <FaCalendarAlt className="mr-2 text-cyan-500" />
+                                                                <span className="font-medium">Fecha:</span>
+                                                            </p>
+                                                            <p className="ml-6">{new Date(selectedTorneo.fecha).toLocaleDateString()}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-gray-600 flex items-center mb-2">
+                                                                <FaMapMarkerAlt className="mr-2 text-cyan-500" />
+                                                                <span className="font-medium">Ubicación:</span>
+                                                            </p>
+                                                            <p className="ml-6">{selectedTorneo.ubicacion}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-gray-600 flex items-center mb-2">
+                                                                <FaTrophy className="mr-2 text-cyan-500" />
+                                                                <span className="font-medium">Categoría:</span>
+                                                            </p>
+                                                            <p className="ml-6">{selectedTorneo.categoria}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-gray-600 flex items-center mb-2">
+                                                                <FaVenusMars className="mr-2 text-cyan-500" />
+                                                                <span className="font-medium">Género:</span>
+                                                            </p>
+                                                            <p className="ml-6">{selectedTorneo.genero}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="bg-gray-50 p-4 rounded-lg">
+                                                    <h3 className="font-semibold text-lg mb-3 text-gray-800">Horarios</h3>
+                                                    <div className="space-y-2">
+                                                        <p className="text-sm">
+                                                            <span className="font-medium">Inicio del torneo:</span> 9:00 AM
+                                                        </p>
+                                                        <p className="text-sm">
+                                                            <span className="font-medium">Fase de grupos:</span> 9:00 AM - 2:00 PM
+                                                        </p>
+                                                        <p className="text-sm">
+                                                            <span className="font-medium">Eliminatorias:</span> 3:00 PM - 7:00 PM
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+
+                                        {/* Resultados Tab Content - Updated Design */}
+                                        {activeTab === 'resultados' && (
+                                            <div className="space-y-4">
+                                                <div className="bg-gray-50 rounded-lg overflow-hidden">
+                                                    <div className="flex justify-between items-center bg-gray-100 px-4 py-2">
+                                                        <div className="font-semibold text-gray-700">{selectedTorneo.nombre}</div>
+                                                        <div className="flex items-center space-x-4">
+                                                            <span className="text-xs text-cyan-600 font-semibold">
+                                                                {selectedTorneo.genero.toUpperCase()}
+                                                            </span>
+                                                            <span className="text-xs text-gray-500">FINAL</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {selectedTorneo.resultados.map((partido, index) => (
+                                                        <div key={index} className="border-t border-gray-200">
+                                                            <div className="px-4 py-3">
+                                                                <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                                                                    {/* Equipo 1 */}
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Image
+                                                                            src={partido.equipo1.bandera}
+                                                                            alt={`Bandera de ${partido.equipo1.pais}`}
+                                                                            width={20}
+                                                                            height={15}
+                                                                            className="object-cover"
+                                                                        />
+                                                                        <span className="font-medium">{partido.equipo1.nombre}</span>
+                                                                    </div>
+
+                                                                    {/* Resultados */}
+                                                                    <div className="flex gap-2 justify-center min-w-[100px]">
+                                                                        {partido.sets.map((set, setIndex) => (
+                                                                            <div key={setIndex} className="flex gap-1">
+                                                                                <span className="w-6 text-center font-medium">
+                                                                                    {set.equipo1}
+                                                                                </span>
+                                                                                <span className="w-6 text-center font-medium">
+                                                                                    {set.equipo2}
+                                                                                </span>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+
+                                                                    {/* Equipo 2 */}
+                                                                    <div className="flex items-center gap-2 justify-end">
+                                                                        <span className="font-medium">{partido.equipo2.nombre}</span>
+                                                                        <Image
+                                                                            src={partido.equipo2.bandera}
+                                                                            alt={`Bandera de ${partido.equipo2.pais}`}
+                                                                            width={20}
+                                                                            height={15}
+                                                                            className="object-cover"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+
+                                                    <div className="flex justify-between items-center bg-gray-50 px-4 py-2 border-t border-gray-200">
+                                                        <span className="text-xs text-gray-500">{selectedTorneo.hora} COMPLETED</span>
+                                                        <button className="text-xs text-cyan-600 hover:underline">
+                                                            MATCH STATS
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
+
                         </div>
                     </div>
                 </div>

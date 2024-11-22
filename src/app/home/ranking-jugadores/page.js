@@ -41,7 +41,7 @@ const rankingData = [
 export default function RankingJugadores() {
     const [searchTerm, setSearchTerm] = useState('')
     const [expandedCategory, setExpandedCategory] = useState("Primera")
-    const [genderFilter, setGenderFilter] = useState('todos')
+    const [genderFilter, setGenderFilter] = useState('masculino')
 
     const toggleCategory = (category) => {
         if (expandedCategory === category) {
@@ -83,12 +83,6 @@ export default function RankingJugadores() {
                                     <FaSearch className="absolute right-3 top-3 text-gray-400" />
                                 </div>
                                 <div className="flex justify-center space-x-4">
-                                    <button
-                                        className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'todos' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        onClick={() => setGenderFilter('todos')}
-                                    >
-                                        Todos
-                                    </button>
                                     <button
                                         className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'masculino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                                         onClick={() => setGenderFilter('masculino')}
