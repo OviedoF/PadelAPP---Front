@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch } from 'react-icons/fa'
+import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch, FaVenusMars } from 'react-icons/fa'
 import Nav from '../../Navbar'
 
-// Datos de ejemplo para los resultados de torneos
+// Datos de ejemplo actualizados para incluir la categoría de género
 const torneosResultados = [
     {
         id: 1,
@@ -12,6 +12,7 @@ const torneosResultados = [
         fecha: "2024-03-15",
         ubicacion: "Madrid",
         categoria: "Primera División",
+        genero: "Masculino",
         resultados: [
             { posicion: 1, equipo: "Padel Pro Madrid", puntos: 1000 },
             { posicion: 2, equipo: "Barcelona Stars", puntos: 750 },
@@ -25,6 +26,7 @@ const torneosResultados = [
         fecha: "2024-03-22",
         ubicacion: "Barcelona",
         categoria: "Segunda División",
+        genero: "Femenino",
         resultados: [
             { posicion: 1, equipo: "Girona Padel Club", puntos: 800 },
             { posicion: 2, equipo: "Lleida Legends", puntos: 600 },
@@ -38,6 +40,7 @@ const torneosResultados = [
         fecha: "2024-04-01",
         ubicacion: "Valencia",
         categoria: "Primera División",
+        genero: "Masculino",
         resultados: [
             { posicion: 1, equipo: "Valencia Victors", puntos: 1000 },
             { posicion: 2, equipo: "Alicante Aces", puntos: 750 },
@@ -51,6 +54,7 @@ const torneosResultados = [
         fecha: "2024-04-10",
         ubicacion: "Sevilla",
         categoria: "Tercera División",
+        genero: "Femenino",
         resultados: [
             { posicion: 1, equipo: "Sevilla Strikers", puntos: 600 },
             { posicion: 2, equipo: "Córdoba Chargers", puntos: 450 },
@@ -63,11 +67,13 @@ const torneosResultados = [
 export default function TorneosResultados() {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedTorneo, setSelectedTorneo] = useState(null)
+    const [generoFilter, setGeneroFilter] = useState('Todos')
 
     const filteredTorneos = torneosResultados.filter(torneo =>
-        torneo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (torneo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         torneo.ubicacion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        torneo.categoria.toLowerCase().includes(searchTerm.toLowerCase())
+        torneo.categoria.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (generoFilter === 'Todos' || torneo.genero === generoFilter)
     )
 
     return (
@@ -81,8 +87,8 @@ export default function TorneosResultados() {
                         <div className="max-w-4xl mx-auto">
                             <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Resultados de Torneos</h1>
 
-                            <div className="mb-6">
-                                <div className="relative">
+                            <div className="mb-6 flex flex-col sm:flex-row gap-4">
+                                <div className="relative flex-grow">
                                     <input
                                         type="text"
                                         placeholder="Buscar torneo..."
@@ -91,6 +97,18 @@ export default function TorneosResultados() {
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                     <FaSearch className="absolute right-3 top-3 text-gray-400" />
+                                </div>
+                                <div className="relative w-1/3">
+                                    <select
+                                        className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none"
+                                        value={generoFilter}
+                                        onChange={(e) => setGeneroFilter(e.target.value)}
+                                    >
+                                        <option value="Todos">Todos</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                    </select>
+                                    <FaVenusMars className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
                                 </div>
                             </div>
 
@@ -110,9 +128,13 @@ export default function TorneosResultados() {
                                             <FaMapMarkerAlt className="mr-2 text-cyan-500" />
                                             {torneo.ubicacion}
                                         </p>
-                                        <p className="text-gray-600 flex items-center">
+                                        <p className="text-gray-600 flex items-center mb-1">
                                             <FaTrophy className="mr-2 text-cyan-500" />
                                             {torneo.categoria}
+                                        </p>
+                                        <p className="text-gray-600 flex items-center">
+                                            <FaVenusMars className="mr-2 text-cyan-500" />
+                                            {torneo.genero}
                                         </p>
                                     </div>
                                 ))}
@@ -138,9 +160,13 @@ export default function TorneosResultados() {
                                             <FaMapMarkerAlt className="mr-2 text-cyan-500" />
                                             {selectedTorneo.ubicacion}
                                         </p>
-                                        <p className="text-gray-600 flex items-center mb-4">
+                                        <p className="text-gray-600 flex items-center mb-2">
                                             <FaTrophy className="mr-2 text-cyan-500" />
                                             {selectedTorneo.categoria}
+                                        </p>
+                                        <p className="text-gray-600 flex items-center mb-4">
+                                            <FaVenusMars className="mr-2 text-cyan-500" />
+                                            {selectedTorneo.genero}
                                         </p>
                                         <h3 className="text-xl font-semibold mb-2">Resultados</h3>
                                         <ul className="space-y-2">
@@ -167,3 +193,4 @@ export default function TorneosResultados() {
         </>
     )
 }
+
