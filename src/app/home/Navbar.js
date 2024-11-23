@@ -70,7 +70,6 @@ export default function Nav() {
       text: 'Torneos',
       icon: FaTrophy,
       dropdownItems: [
-        { href: routes.torneosDivisiones, text: 'Divisiones' },
         { href: routes.torneosCalendario, text: 'Calendario' },
         { href: routes.torneosResultados, text: 'Resultados' },
       ],
