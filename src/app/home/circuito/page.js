@@ -1,81 +1,87 @@
 'use client'
 
 import { useState } from 'react'
-import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaNewspaper, FaMedal, FaChevronDown, FaChevronUp, FaMars, FaVenus, FaEnvelope, FaWhatsapp, FaTimes } from 'react-icons/fa'
+import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaChevronDown, FaChevronUp, FaMars, FaVenus, FaEnvelope, FaWhatsapp, FaTimes } from 'react-icons/fa'
 import Nav from '../Navbar'
 
 // Datos de ejemplo para el circuito
 const circuitoData = {
-  proximosTorneos: [
-    {
-      id: 1,
-      nombre: "Gran Slam Madrid",
-      fecha: "2024-05-10",
-      ubicacion: "Madrid",
-      categoria: "Grand Slam",
-      genero: "masculino",
-      division: "Primera",
-      email: "granslam.madrid@example.com",
-      whatsapp: "+34123456789",
-      descripcion: "El torneo más prestigioso del circuito, con los mejores jugadores compitiendo por el título más codiciado."
-    },
-    {
-      id: 2,
-      nombre: "Master Barcelona",
-      fecha: "2024-06-15",
-      ubicacion: "Barcelona",
-      categoria: "Master",
-      genero: "femenino",
-      division: "Segunda",
-      email: "master.barcelona@example.com",
-      whatsapp: "+34987654321",
-      descripcion: "Un torneo de alto nivel que reúne a las mejores jugadoras en una competición intensa y emocionante."
-    },
-    {
-      id: 3,
-      nombre: "Open Sevilla",
-      fecha: "2024-07-01",
-      ubicacion: "Sevilla",
-      categoria: "Open",
-      genero: "masculino",
-      division: "Tercera",
-      email: "open.sevilla@example.com",
-      whatsapp: "+34567891234",
-      descripcion: "Un torneo abierto que ofrece grandes oportunidades para jugadores emergentes y establecidos por igual."
-    },
-    {
-      id: 4,
-      nombre: "Challenger Valencia",
-      fecha: "2024-07-15",
-      ubicacion: "Valencia",
-      categoria: "Challenger",
-      genero: "femenino",
-      division: "Primera",
-      email: "challenger.valencia@example.com",
-      whatsapp: "+34432187654",
-      descripcion: "Un torneo desafiante que pone a prueba las habilidades de las jugadoras en ascenso."
-    },
-  ],
   categorias: [
     {
       nombre: "Grand Slam",
       puntos: 2000,
-      premios: "1.000.000 €"
+      premios: "1.000.000 €",
+      torneos: [
+        {
+          id: 1,
+          nombre: "Gran Slam Madrid",
+          fecha: "2024-05-10",
+          ubicacion: "Madrid",
+          categoria: "Grand Slam",
+          genero: "masculino",
+          division: "Primera",
+          email: "granslam.madrid@example.com",
+          whatsapp: "+34123456789",
+          descripcion: "El torneo más prestigioso del circuito, con los mejores jugadores compitiendo por el título más codiciado."
+        }
+      ]
     },
     {
       nombre: "Master",
       puntos: 1000,
-      premios: "500.000 €"
+      premios: "500.000 €",
+      torneos: [
+        {
+          id: 2,
+          nombre: "Master Barcelona",
+          fecha: "2024-06-15",
+          ubicacion: "Barcelona",
+          categoria: "Master",
+          genero: "femenino",
+          division: "Segunda",
+          email: "master.barcelona@example.com",
+          whatsapp: "+34987654321",
+          descripcion: "Un torneo de alto nivel que reúne a las mejores jugadoras en una competición intensa y emocionante."
+        }
+      ]
     },
     {
       nombre: "Open",
       puntos: 500,
-      premios: "250.000 €"
+      premios: "250.000 €",
+      torneos: [
+        {
+          id: 3,
+          nombre: "Open Sevilla",
+          fecha: "2024-07-01",
+          ubicacion: "Sevilla",
+          categoria: "Open",
+          genero: "masculino",
+          division: "Tercera",
+          email: "open.sevilla@example.com",
+          whatsapp: "+34567891234",
+          descripcion: "Un torneo abierto que ofrece grandes oportunidades para jugadores emergentes y establecidos por igual."
+        }
+      ]
     },
     {
       nombre: "Challenger",
       puntos: 250,
-      premios: "100.000 €"
+      premios: "100.000 €",
+      torneos: [
+        {
+          id: 4,
+          nombre: "Challenger Valencia",
+          fecha: "2024-07-15",
+          ubicacion: "Valencia",
+          categoria: "Challenger",
+          genero: "femenino",
+          division: "Primera",
+          email: "challenger.valencia@example.com",
+          whatsapp: "+34432187654",
+          descripcion: "Un torneo desafiante que pone a prueba las habilidades de las jugadoras en ascenso."
+        }
+      ]
     },
   ]
 }
@@ -91,12 +97,6 @@ export default function Circuito() {
     setExpandedCategory(expandedCategory === category ? null : category)
   }
 
-  const filteredTorneos = circuitoData.proximosTorneos.filter(
-    torneo =>
-      (selectedGender === 'todos' || torneo.genero === selectedGender) &&
-      (selectedDivision === 'todas' || torneo.division === selectedDivision)
-  )
-
   const openModal = (torneo) => {
     setSelectedTorneo(torneo)
     setIsModalOpen(true)
@@ -105,6 +105,14 @@ export default function Circuito() {
   const closeModal = () => {
     setSelectedTorneo(null)
     setIsModalOpen(false)
+  }
+
+  const filteredTorneos = (torneos) => {
+    return torneos.filter(
+      torneo =>
+        (selectedGender === 'todos' || torneo.genero === selectedGender) &&
+        (selectedDivision === 'todas' || torneo.division === selectedDivision)
+    )
   }
 
   return (
@@ -162,37 +170,6 @@ export default function Circuito() {
                 </div>
               </div>
 
-              <section className="mb-12">
-                <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Próximos Torneos</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredTorneos.map((torneo) => (
-                    <div
-                      key={torneo.id}
-                      className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                      onClick={() => openModal(torneo)}
-                    >
-                      <h3 className="font-bold text-lg mb-2">{torneo.nombre}</h3>
-                      <p className="text-gray-600 flex items-center mb-1">
-                        <FaCalendarAlt className="mr-2 text-cyan-500" />
-                        {new Date(torneo.fecha).toLocaleDateString()}
-                      </p>
-                      <p className="text-gray-600 flex items-center mb-1">
-                        <FaMapMarkerAlt className="mr-2 text-cyan-500" />
-                        {torneo.ubicacion}
-                      </p>
-                      <p className="text-gray-600 flex items-center mb-1">
-                        <FaTrophy className="mr-2 text-cyan-500" />
-                        {torneo.categoria}
-                      </p>
-                      <p className="text-gray-600 flex items-center">
-                        {torneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
-                        {torneo.genero.charAt(0).toUpperCase() + torneo.genero.slice(1)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Categorías de Torneos</h2>
                 <div className="space-y-4">
@@ -213,8 +190,32 @@ export default function Circuito() {
                       </button>
                       {expandedCategory === categoria.nombre && (
                         <div className="px-6 py-4 bg-gray-50">
-                          <p className="text-gray-700">Puntos: {categoria.puntos}</p>
-                          <p className="text-gray-700">Premios: {categoria.premios}</p>
+                          <p className="text-gray-700 mb-2">Puntos: {categoria.puntos}</p>
+                          <p className="text-gray-700 mb-4">Premios: {categoria.premios}</p>
+                          <h3 className="font-semibold text-lg mb-2">Torneos:</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {filteredTorneos(categoria.torneos).map((torneo) => (
+                              <div
+                                key={torneo.id}
+                                className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+                                onClick={() => openModal(torneo)}
+                              >
+                                <h4 className="font-bold text-lg mb-2">{torneo.nombre}</h4>
+                                <p className="text-gray-600 flex items-center mb-1">
+                                  <FaCalendarAlt className="mr-2 text-cyan-500" />
+                                  {new Date(torneo.fecha).toLocaleDateString()}
+                                </p>
+                                <p className="text-gray-600 flex items-center mb-1">
+                                  <FaMapMarkerAlt className="mr-2 text-cyan-500" />
+                                  {torneo.ubicacion}
+                                </p>
+                                <p className="text-gray-600 flex items-center">
+                                  {torneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
+                                  {torneo.genero.charAt(0).toUpperCase() + torneo.genero.slice(1)}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>

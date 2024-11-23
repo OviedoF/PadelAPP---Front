@@ -53,12 +53,13 @@ export default function RankingJugadores() {
 
     const filteredRanking = rankingData.map((categoria) => ({
         ...categoria,
-        jugadores: categoria.jugadores.map((jugador) => ({
+        jugadores: categoria.jugadores.map((jugador, index) => ({
             ...jugador,
+            posicion: index + 1, // Mantener posición original
             visible:
+                (genderFilter === 'todos' || jugador.genero === genderFilter) &&
                 (jugador.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    jugador.club.toLowerCase().includes(searchTerm.toLowerCase())) &&
-                (genderFilter === "todos" || jugador.genero === genderFilter),
+                    jugador.club.toLowerCase().includes(searchTerm.toLowerCase())),
         })),
     }));
 
@@ -128,17 +129,20 @@ export default function RankingJugadores() {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="bg-white divide-y divide-gray-200">
-                                                    {categoria.jugadores.map((jugador, index) => (
+                                                    {categoria.jugadores.map((jugador) =>
                                                         jugador.visible && (
                                                             <tr key={jugador.id}>
                                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                                     <div className="flex items-center">
-                                                                        <FaMedal className={`mr-2 ${index === 0 ? 'text-yellow-400' :
-                                                                                index === 1 ? 'text-gray-400' :
-                                                                                    index === 2 ? 'text-yellow-700' :
-                                                                                        'text-gray-400'
+                                                                        <FaMedal className={`mr-2 ${jugador.posicion === 1
+                                                                                ? 'text-yellow-400'
+                                                                                : jugador.posicion === 2
+                                                                                    ? 'text-gray-400'
+                                                                                    : jugador.posicion === 3
+                                                                                        ? 'text-yellow-700'
+                                                                                        : 'text-gray-400'
                                                                             }`} />
-                                                                        <span className="text-sm font-medium text-gray-900">{index + 1}</span>
+                                                                        <span className="text-sm font-medium text-gray-900">{jugador.posicion}</span>
                                                                     </div>
                                                                 </td>
                                                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -161,9 +165,8 @@ export default function RankingJugadores() {
                                                                 </td>
                                                             </tr>
                                                         )
-                                                    ))}
+                                                    )}
                                                 </tbody>
-
                                             </table>
                                         </div>
                                     )}
