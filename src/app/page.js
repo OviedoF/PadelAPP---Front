@@ -23,7 +23,7 @@ export default function LoginForm() {
       return navigate(routes.moderator)
     }
 
-    return navigate(routes.torneosDivisiones)
+    return navigate(routes.circuito)
   }
 
   return (
@@ -85,7 +85,7 @@ export default function LoginForm() {
             </div>
           </div>
 
-          <Link href={routes.torneosDivisiones} className="text-sm text-indigo-600 hover:text-indigo-500 mt-2">
+          <Link href={routes.circuito} className="text-sm text-indigo-600 hover:text-indigo-500 mt-2">
             Ingresar como invitado
           </Link>
 
