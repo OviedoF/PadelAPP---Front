@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { FaTrophy, FaUsers, FaCalendarAlt, FaMapMarkerAlt, FaMars, FaVenus } from 'react-icons/fa'
+import { FaCalendarAlt, FaMapMarkerAlt, FaMars, FaVenus, FaEnvelope, FaWhatsapp, FaTimes } from 'react-icons/fa'
 import Nav from '../../Navbar'
 
 // Datos de ejemplo para las divisiones
@@ -74,48 +74,78 @@ const proximosTorneos = [
     fecha: "2024-03-15",
     ubicacion: "Madrid",
     division: "Primera División",
-    genero: "Masculino"
+    genero: "Masculino",
+    email: "torneo1@example.com",
+    whatsapp: "+34123456789",
+    descripcion: "Torneo clasificatorio para el ascenso a la Primera División Masculina. Los mejores equipos competirán por un lugar en la máxima categoría."
   },
   {
     nombre: "Torneo Ascenso Primera División Femenino",
     fecha: "2024-03-16",
     ubicacion: "Madrid",
     division: "Primera División",
-    genero: "Femenino"
+    genero: "Femenino",
+    email: "torneo2@example.com",
+    whatsapp: "+34123456790",
+    descripcion: "Torneo clasificatorio para el ascenso a la Primera División Femenina. Los mejores equipos competirán por un lugar en la máxima categoría."
   },
   {
     nombre: "Playoff Segunda División Masculino",
     fecha: "2024-03-22",
     ubicacion: "Barcelona",
     division: "Segunda División",
-    genero: "Masculino"
+    genero: "Masculino",
+    email: "torneo3@example.com",
+    whatsapp: "+34123456791",
+    descripcion: "Playoff de la Segunda División Masculina para determinar el campeón de la categoría."
   },
   {
     nombre: "Playoff Segunda División Femenino",
     fecha: "2024-03-23",
     ubicacion: "Barcelona",
     division: "Segunda División",
-    genero: "Femenino"
+    genero: "Femenino",
+    email: "torneo4@example.com",
+    whatsapp: "+34123456792",
+    descripcion: "Playoff de la Segunda División Femenina para determinar el campeón de la categoría."
   },
   {
     nombre: "Copa Promoción Masculina",
     fecha: "2024-04-01",
     ubicacion: "Valencia",
     division: "Tercera División",
-    genero: "Masculino"
+    genero: "Masculino",
+    email: "torneo5@example.com",
+    whatsapp: "+34123456793",
+    descripcion: "Copa de Promoción para equipos de la Tercera División Masculina."
   },
   {
     nombre: "Copa Promoción Femenina",
     fecha: "2024-04-02",
     ubicacion: "Valencia",
     division: "Tercera División",
-    genero: "Femenino"
+    genero: "Femenino",
+    email: "torneo6@example.com",
+    whatsapp: "+34123456794",
+    descripcion: "Copa de Promoción para equipos de la Tercera División Femenina."
   }
 ]
 
 export default function TorneosDivisiones() {
   const [selectedDivision, setSelectedDivision] = useState("Primera División")
   const [selectedGender, setSelectedGender] = useState("Masculino")
+  const [selectedTorneo, setSelectedTorneo] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = (torneo) => {
+    setSelectedTorneo(torneo)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setSelectedTorneo(null)
+    setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -162,62 +192,6 @@ export default function TorneosDivisiones() {
                 ))}
               </div>
 
-              {/* Tabla de Clasificación */}
-              <div className="mb-12">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                  <FaTrophy className="mr-2 text-cyan-500" />
-                  Clasificación {selectedDivision} {selectedGender}
-                </h2>
-                <div className="bg-white rounded-lg shadow overflow-hidden">
-                  <table className="min-w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posición</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Puntos</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PJ</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PG</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {divisionesData
-                        .find(d => d.division === selectedDivision && d.genero === selectedGender)
-                        ?.equipos.map((equipo, index) => (
-                          <tr key={equipo.nombre} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <span className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                                  index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                                  index === 1 ? 'bg-gray-100 text-gray-800' :
-                                  index === 2 ? 'bg-orange-100 text-orange-800' :
-                                  'bg-gray-50 text-gray-600'
-                                }`}>
-                                  {index + 1}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <FaUsers className="mr-2 text-cyan-500" />
-                                <span className="font-medium text-gray-900">{equipo.nombre}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {equipo.puntos}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {equipo.jugados}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {equipo.ganados}
-                            </td>
-                          </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
               {/* Próximos Torneos de la División */}
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -228,7 +202,11 @@ export default function TorneosDivisiones() {
                   {proximosTorneos
                     .filter(torneo => torneo.division === selectedDivision && torneo.genero === selectedGender)
                     .map((torneo) => (
-                      <div key={torneo.nombre} className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                      <div 
+                        key={torneo.nombre} 
+                        className="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                        onClick={() => openModal(torneo)}
+                      >
                         <h3 className="font-medium text-gray-900 mb-2">{torneo.nombre}</h3>
                         <p className="text-gray-600 flex items-center mb-1">
                           <FaCalendarAlt className="mr-2 text-cyan-500" />
@@ -246,6 +224,38 @@ export default function TorneosDivisiones() {
           </div>
         </div>
       </main>
+
+      {/* Modal */}
+      {isModalOpen && selectedTorneo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full m-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">{selectedTorneo.nombre}</h2>
+              <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                <FaTimes size={24} />
+              </button>
+            </div>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaCalendarAlt className="mr-2 text-cyan-500" />
+              {new Date(selectedTorneo.fecha).toLocaleDateString()}
+            </p>
+            <p className="text-gray-600 flex items-center mb-4">
+              <FaMapMarkerAlt className="mr-2 text-cyan-500" />
+              {selectedTorneo.ubicacion}
+            </p>
+            <p className="text-gray-700 mb-4">{selectedTorneo.descripcion}</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Contacto:</h3>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaEnvelope className="mr-2 text-cyan-500" />
+              <a href={`mailto:${selectedTorneo.email}`} className="hover:underline">{selectedTorneo.email}</a>
+            </p>
+            <p className="text-gray-600 flex items-center">
+              <FaWhatsapp className="mr-2 text-cyan-500" />
+              <a href={`https://wa.me/${selectedTorneo.whatsapp}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{selectedTorneo.whatsapp}</a>
+            </p>
+          </div>
+        </div>
+      )}
     </>
   )
 }

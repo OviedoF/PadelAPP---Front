@@ -51,14 +51,16 @@ export default function RankingJugadores() {
         }
     }
 
-    const filteredRanking = rankingData.map(categoria => ({
+    const filteredRanking = rankingData.map((categoria) => ({
         ...categoria,
-        jugadores: categoria.jugadores.filter(jugador =>
-            (jugador.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            jugador.club.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (genderFilter === 'todos' || jugador.genero === genderFilter)
-        )
-    })).filter(categoria => categoria.jugadores.length > 0)
+        jugadores: categoria.jugadores.map((jugador) => ({
+            ...jugador,
+            visible:
+                (jugador.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    jugador.club.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                (genderFilter === "todos" || jugador.genero === genderFilter),
+        })),
+    }));
 
     return (
         <>
@@ -127,38 +129,41 @@ export default function RankingJugadores() {
                                                 </thead>
                                                 <tbody className="bg-white divide-y divide-gray-200">
                                                     {categoria.jugadores.map((jugador, index) => (
-                                                        <tr key={jugador.id}>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="flex items-center">
-                                                                    <FaMedal className={`mr-2 ${index === 0 ? 'text-yellow-400' :
-                                                                            index === 1 ? 'text-gray-400' :
-                                                                                index === 2 ? 'text-yellow-700' :
-                                                                                    'text-gray-400'
-                                                                        }`} />
-                                                                    <span className="text-sm font-medium text-gray-900">{index + 1}</span>
-                                                                </div>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm font-medium text-gray-900">{jugador.nombre}</div>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-500">{jugador.club}</div>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm font-semibold text-gray-900">{jugador.puntos}</div>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-500 flex items-center">
-                                                                    {jugador.genero === 'masculino' ? (
-                                                                        <><FaMars className="mr-1 text-blue-500" /> Masculino</>
-                                                                    ) : (
-                                                                        <><FaVenus className="mr-1 text-pink-500" /> Femenino</>
-                                                                    )}
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                        jugador.visible && (
+                                                            <tr key={jugador.id}>
+                                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                                    <div className="flex items-center">
+                                                                        <FaMedal className={`mr-2 ${index === 0 ? 'text-yellow-400' :
+                                                                                index === 1 ? 'text-gray-400' :
+                                                                                    index === 2 ? 'text-yellow-700' :
+                                                                                        'text-gray-400'
+                                                                            }`} />
+                                                                        <span className="text-sm font-medium text-gray-900">{index + 1}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                                    <div className="text-sm font-medium text-gray-900">{jugador.nombre}</div>
+                                                                </td>
+                                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                                    <div className="text-sm text-gray-500">{jugador.club}</div>
+                                                                </td>
+                                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                                    <div className="text-sm font-semibold text-gray-900">{jugador.puntos}</div>
+                                                                </td>
+                                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                                    <div className="text-sm text-gray-500 flex items-center">
+                                                                        {jugador.genero === 'masculino' ? (
+                                                                            <><FaMars className="mr-1 text-blue-500" /> Masculino</>
+                                                                        ) : (
+                                                                            <><FaVenus className="mr-1 text-pink-500" /> Femenino</>
+                                                                        )}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )
                                                     ))}
                                                 </tbody>
+
                                             </table>
                                         </div>
                                     )}

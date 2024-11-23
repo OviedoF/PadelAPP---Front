@@ -1,16 +1,56 @@
 'use client'
 
 import { useState } from 'react'
-import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaNewspaper, FaMedal, FaChevronDown, FaChevronUp, FaMars, FaVenus } from 'react-icons/fa'
+import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaNewspaper, FaMedal, FaChevronDown, FaChevronUp, FaMars, FaVenus, FaEnvelope, FaWhatsapp, FaTimes } from 'react-icons/fa'
 import Nav from '../Navbar'
 
 // Datos de ejemplo para el circuito
 const circuitoData = {
   proximosTorneos: [
-    { id: 1, nombre: "Gran Slam Madrid", fecha: "2024-05-10", ubicacion: "Madrid", categoria: "Grand Slam", genero: "masculino" },
-    { id: 2, nombre: "Master Barcelona", fecha: "2024-06-15", ubicacion: "Barcelona", categoria: "Master", genero: "femenino" },
-    { id: 3, nombre: "Open Sevilla", fecha: "2024-07-01", ubicacion: "Sevilla", categoria: "Open", genero: "masculino" },
-    { id: 4, nombre: "Challenger Valencia", fecha: "2024-07-15", ubicacion: "Valencia", categoria: "Challenger", genero: "femenino" },
+    { 
+      id: 1, 
+      nombre: "Gran Slam Madrid", 
+      fecha: "2024-05-10", 
+      ubicacion: "Madrid", 
+      categoria: "Grand Slam", 
+      genero: "masculino",
+      email: "granslam.madrid@example.com",
+      whatsapp: "+34123456789",
+      descripcion: "El torneo más prestigioso del circuito, con los mejores jugadores compitiendo por el título más codiciado."
+    },
+    { 
+      id: 2, 
+      nombre: "Master Barcelona", 
+      fecha: "2024-06-15", 
+      ubicacion: "Barcelona", 
+      categoria: "Master", 
+      genero: "femenino",
+      email: "master.barcelona@example.com",
+      whatsapp: "+34987654321",
+      descripcion: "Un torneo de alto nivel que reúne a las mejores jugadoras en una competición intensa y emocionante."
+    },
+    { 
+      id: 3, 
+      nombre: "Open Sevilla", 
+      fecha: "2024-07-01", 
+      ubicacion: "Sevilla", 
+      categoria: "Open", 
+      genero: "masculino",
+      email: "open.sevilla@example.com",
+      whatsapp: "+34567891234",
+      descripcion: "Un torneo abierto que ofrece grandes oportunidades para jugadores emergentes y establecidos por igual."
+    },
+    { 
+      id: 4, 
+      nombre: "Challenger Valencia", 
+      fecha: "2024-07-15", 
+      ubicacion: "Valencia", 
+      categoria: "Challenger", 
+      genero: "femenino",
+      email: "challenger.valencia@example.com",
+      whatsapp: "+34432187654",
+      descripcion: "Un torneo desafiante que pone a prueba las habilidades de las jugadoras en ascenso."
+    },
   ],
   ranking: [
     { posicion: 1, nombre: "Juan Pérez", puntos: 10500, genero: "masculino" },
@@ -35,6 +75,8 @@ const circuitoData = {
 export default function Circuito() {
   const [expandedCategory, setExpandedCategory] = useState(null)
   const [selectedGender, setSelectedGender] = useState('todos')
+  const [selectedTorneo, setSelectedTorneo] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const toggleCategory = (category) => {
     if (expandedCategory === category) {
@@ -51,6 +93,16 @@ export default function Circuito() {
   const filteredRanking = circuitoData.ranking.filter(
     jugador => selectedGender === 'todos' || jugador.genero === selectedGender
   )
+
+  const openModal = (torneo) => {
+    setSelectedTorneo(torneo)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setSelectedTorneo(null)
+    setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -97,7 +149,11 @@ export default function Circuito() {
                 <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Próximos Torneos</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredTorneos.map((torneo) => (
-                    <div key={torneo.id} className="bg-white rounded-lg shadow-md p-4">
+                    <div 
+                      key={torneo.id} 
+                      className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+                      onClick={() => openModal(torneo)}
+                    >
                       <h3 className="font-bold text-lg mb-2">{torneo.nombre}</h3>
                       <p className="text-gray-600 flex items-center mb-1">
                         <FaCalendarAlt className="mr-2 text-cyan-500" />
@@ -117,51 +173,6 @@ export default function Circuito() {
                       </p>
                     </div>
                   ))}
-                </div>
-              </section>
-
-              <section className="mb-12">
-                <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Ranking del Circuito</h2>
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <table className="min-w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posición</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jugador</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Puntos</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Género</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredRanking.map((jugador, index) => (
-                        <tr key={jugador.posicion}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <FaMedal className={`mr-2 ${
-                                index === 0 ? 'text-yellow-400' :
-                                index === 1 ? 'text-gray-400' :
-                                index === 2 ? 'text-yellow-700' :
-                                'text-gray-400'
-                              }`} />
-                              <span className="text-sm font-medium text-gray-900">{index + 1}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{jugador.nombre}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{jugador.puntos}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 flex items-center">
-                              {jugador.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
-                              {jugador.genero.charAt(0).toUpperCase() + jugador.genero.slice(1)}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
                 </div>
               </section>
 
@@ -197,6 +208,47 @@ export default function Circuito() {
           </div>
         </div>
       </main>
+
+      {/* Modal */}
+      {isModalOpen && selectedTorneo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full m-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">{selectedTorneo.nombre}</h2>
+              <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                <FaTimes size={24} />
+              </button>
+            </div>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaCalendarAlt className="mr-2 text-cyan-500" />
+              {new Date(selectedTorneo.fecha).toLocaleDateString()}
+            </p>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaMapMarkerAlt className="mr-2 text-cyan-500" />
+              {selectedTorneo.ubicacion}
+            </p>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaTrophy className="mr-2 text-cyan-500" />
+              {selectedTorneo.categoria}
+            </p>
+            <p className="text-gray-600 flex items-center mb-4">
+              {selectedTorneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
+              {selectedTorneo.genero.charAt(0).toUpperCase() + selectedTorneo.genero.slice(1)}
+            </p>
+            <p className="text-gray-700 mb-4">{selectedTorneo.descripcion}</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Contacto:</h3>
+            <p className="text-gray-600 flex items-center mb-2">
+              <FaEnvelope className="mr-2 text-cyan-500" />
+              <a href={`mailto:${selectedTorneo.email}`} className="hover:underline">{selectedTorneo.email}</a>
+            </p>
+            <p className="text-gray-600 flex items-center">
+              <FaWhatsapp className="mr-2 text-cyan-500" />
+              <a href={`https://wa.me/${selectedTorneo.whatsapp}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{selectedTorneo.whatsapp}</a>
+            </p>
+          </div>
+        </div>
+      )}
     </>
   )
 }
+
