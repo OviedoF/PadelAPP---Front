@@ -120,7 +120,7 @@ export default function Circuito() {
       <Nav />
 
       <main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-        <div className="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div className="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto w-1/2">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
           <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
             <div className="max-w-4xl mx-auto">
@@ -190,14 +190,11 @@ export default function Circuito() {
                       </button>
                       {expandedCategory === categoria.nombre && (
                         <div className="px-6 py-4 bg-gray-50">
-                          <p className="text-gray-700 mb-2">Puntos: {categoria.puntos}</p>
-                          <p className="text-gray-700 mb-4">Premios: {categoria.premios}</p>
-                          <h3 className="font-semibold text-lg mb-2">Torneos:</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {filteredTorneos(categoria.torneos).map((torneo) => (
                               <div
                                 key={torneo.id}
-                                className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+                                className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
                                 onClick={() => openModal(torneo)}
                               >
                                 <h4 className="font-bold text-lg mb-2">{torneo.nombre}</h4>
@@ -212,6 +209,14 @@ export default function Circuito() {
                                 <p className="text-gray-600 flex items-center">
                                   {torneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
                                   {torneo.genero.charAt(0).toUpperCase() + torneo.genero.slice(1)}
+                                </p>
+                                <p className="text-gray-600 flex items-center">
+                                  <FaMedal className="mr-2 text-cyan-500" />
+                                  {categoria.puntos} puntos
+                                </p>
+                                <p className="text-gray-600 flex items-center">
+                                  <FaTrophy className="mr-2 text-cyan-500" />
+                                  {categoria.premios}
                                 </p>
                               </div>
                             ))}
