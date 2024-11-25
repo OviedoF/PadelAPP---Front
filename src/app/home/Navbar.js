@@ -72,9 +72,9 @@ export default function Nav() {
       dropdownItems: [
         { href: routes.torneosCalendario, text: 'Calendario' },
         { href: routes.torneosResultados, text: 'Resultados' },
+        { href: routes.circuito, text: 'Circuito' },
       ],
     },
-    { href: routes.circuito, text: 'Circuito', icon: FaCircle },
     { href: routes.rankingJugadores, text: 'Ranking de Jugadores', icon: FaUsers },
     {
       href: '/contacto',
