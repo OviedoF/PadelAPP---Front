@@ -1,25 +1,15 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaCalendarAlt, FaMapMarkerAlt, FaTrophy, FaList, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import Nav from '../../Navbar'
 // Datos de ejemplo para los torneos
-const torneosData = [
-  { id: 1, nombre: "Torneo Madrid Open", fecha: "2024-11-15", ubicacion: "Madrid", categoria: "Primera División" },
-  { id: 2, nombre: "Barcelona Padel Cup", fecha: "2024-11-22", ubicacion: "Barcelona", categoria: "Segunda División" },
-  { id: 3, nombre: "Valencia Padel Masters", fecha: "2024-12-01", ubicacion: "Valencia", categoria: "Primera División" },
-  { id: 4, nombre: "Sevilla Padel Championship", fecha: "2024-12-10", ubicacion: "Sevilla", categoria: "Tercera División" },
-  { id: 5, nombre: "Málaga Summer Padel", fecha: "2025-01-01", ubicacion: "Málaga", categoria: "Segunda División" },
-  { id: 6, nombre: "Zaragoza Padel Open", fecha: "2025-01-15", ubicacion: "Zaragoza", categoria: "Primera División" },
-  { id: 7, nombre: "Bilbao Padel Classic", fecha: "2024-10-01", ubicacion: "Bilbao", categoria: "Segunda División" },
-  { id: 8, nombre: "Vigo Padel Cup", fecha: "2024-10-10", ubicacion: "Vigo", categoria: "Tercera División" },
-  { id: 9, nombre: "Gran Canaria Padel Tour", fecha: "2024-11-18", ubicacion: "Las Palmas", categoria: "Primera División" },
-  { id: 10, nombre: "Murcia Padel Experience", fecha: "2024-12-01", ubicacion: "Murcia", categoria: "Segunda División" },
-  { id: 11, nombre: "Santander Beach Padel", fecha: "2025-01-20", ubicacion: "Santander", categoria: "Tercera División" },
-  { id: 12, nombre: "Valladolid Padel Open", fecha: "2024-10-15", ubicacion: "Valladolid", categoria: "Primera División" },
-]
+import axios from 'axios'
+
 export default function TorneosCalendario() {
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [currentDate, setCurrentDate] = useState(new Date())
   const [viewMode, setViewMode] = useState('calendar') // 'calendar' or 'list'
+  const [torneosData, setTorneosData] = useState([])
   const nextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
   }
@@ -32,6 +22,20 @@ export default function TorneosCalendario() {
   const getFirstDayOfMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay()
   }
+  
+    const getTournaments = async () => {
+        try {
+            const response = await axios.get(`${backendUrl}/tournament/calendar`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            setTorneosData(response.data);
+        } catch (error) {
+            console.error('Error fetching tournaments:', error);
+        }
+    };
+
   const renderCalendar = () => {
     const daysInMonth = getDaysInMonth(currentDate)
     const firstDayOfMonth = getFirstDayOfMonth(currentDate)
@@ -56,6 +60,7 @@ export default function TorneosCalendario() {
     }
     return days
   }
+
   const renderList = () => {
     return torneosData
       .filter(torneo => new Date(torneo.fecha).getMonth() === currentDate.getMonth())
@@ -78,6 +83,11 @@ export default function TorneosCalendario() {
         </div>
       ))
   }
+
+  useEffect(() => {
+    getTournaments()
+  }, [currentDate])
+
   return (
     <>
       <Nav />

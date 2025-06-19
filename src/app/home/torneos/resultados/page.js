@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch, FaVenusMars, FaInfoCircle, FaListAlt } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaSearch, FaVenusMars, FaInfoCircle, FaListAlt, FaUser, FaUserCircle } from 'react-icons/fa'
 import Nav from '../../Navbar'
 import Image from 'next/image'
+import axios from 'axios'
 
 // Datos de ejemplo actualizados para incluir la categoría de género
-const torneosResultados = [
+const torneosResultadosMock = [
     {
         id: 1,
         nombre: "CC BNK HOLDING",
@@ -126,6 +127,8 @@ export default function TorneosResultados() {
     const [selectedTorneo, setSelectedTorneo] = useState(null)
     const [generoFilter, setGeneroFilter] = useState('Todos')
     const [activeTab, setActiveTab] = useState('overview')
+    const [torneosResultados, setTorneosResultados] = useState([]);
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     const filteredTorneos = torneosResultados.filter(torneo =>
         (torneo.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -133,6 +136,23 @@ export default function TorneosResultados() {
             torneo.categoria.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (generoFilter === 'Todos' || torneo.genero === generoFilter)
     )
+
+    const getTournaments = async () => {
+        try {
+            const response = await axios.get(`${backendUrl}/tournament/results`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            setTorneosResultados(response.data);
+        } catch (error) {
+            console.error('Error fetching tournaments:', error);
+        }
+    };
+
+    useEffect(() => {
+        getTournaments();
+    }, []);
 
     return (
         <>
@@ -310,13 +330,7 @@ export default function TorneosResultados() {
                                                                 <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center">
                                                                     {/* Equipo 1 */}
                                                                     <div className="flex items-center gap-2">
-                                                                        <Image
-                                                                            src={partido.equipo1.bandera}
-                                                                            alt={`Bandera de ${partido.equipo1.pais}`}
-                                                                            width={20}
-                                                                            height={15}
-                                                                            className="object-cover"
-                                                                        />
+                                                                        <FaUserCircle className="text-cyan-500" />
                                                                         <span className="font-medium">{partido.equipo1.nombre}</span>
                                                                     </div>
 
@@ -337,13 +351,7 @@ export default function TorneosResultados() {
                                                                     {/* Equipo 2 */}
                                                                     <div className="flex items-center gap-2 justify-end">
                                                                         <span className="font-medium">{partido.equipo2.nombre}</span>
-                                                                        <Image
-                                                                            src={partido.equipo2.bandera}
-                                                                            alt={`Bandera de ${partido.equipo2.pais}`}
-                                                                            width={20}
-                                                                            height={15}
-                                                                            className="object-cover"
-                                                                        />
+                                                                        <FaUserCircle className="text-cyan-500" />
                                                                     </div>
                                                                 </div>
                                                             </div>

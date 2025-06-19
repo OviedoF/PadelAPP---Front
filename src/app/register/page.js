@@ -1,22 +1,70 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { FaEye, FaEyeSlash, FaUserPlus } from 'react-icons/fa'
-import routes from '../routes'
+import Link from 'next/link';
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
+import { FaEye, FaEyeSlash, FaUserPlus } from 'react-icons/fa';
+import routes from '../routes';
 
 export default function RegisterForm() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e => {
-    e.preventDefault()
-    console.log('Registration attempt:', { name, email, password, confirmPassword })
-  })
+  const { enqueueSnackbar } = useSnackbar();
+
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validaciones de campos
+    if (!name || !email || !password || !confirmPassword) {
+      enqueueSnackbar('Todos los campos son obligatorios.', { variant: 'error' });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      enqueueSnackbar('Las contraseñas no coinciden.', { variant: 'error' });
+      return;
+    }
+
+    if (password.length < 6) {
+      enqueueSnackbar('La contraseña debe tener al menos 6 caracteres.', { variant: 'error' });
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${backendUrl}/auth/register`, {
+        username: name,
+        email,
+        password,
+      });
+
+      // Si la respuesta es exitosa
+      enqueueSnackbar('Registro exitoso. Redirigiendo...', { variant: 'success' });
+
+      // Limpiar campos
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+
+      // Redirigir al login después de 2 segundos
+      setTimeout(() => {
+        window.location.href = routes.login;
+      }, 2000);
+    } catch (error) {
+      // Capturar errores del servidor
+      const errorMessage =
+        error.response?.data?.message || 'Error al registrarse. Intenta nuevamente.';
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+    }
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 px-4 sm:px-6 lg:px-8">
@@ -65,7 +113,7 @@ export default function RegisterForm() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            
+
             <div className="relative">
               <label htmlFor="password" className="sr-only">
                 Contraseña
@@ -73,7 +121,7 @@ export default function RegisterForm() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -101,7 +149,7 @@ export default function RegisterForm() {
               <input
                 id="confirm-password"
                 name="confirm-password"
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -141,5 +189,5 @@ export default function RegisterForm() {
         </form>
       </section>
     </main>
-  )
+  );
 }

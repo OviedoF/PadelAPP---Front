@@ -1,30 +1,58 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { FaEye, FaEyeSlash, FaLock, FaFacebookF, FaTwitter, FaGithub } from 'react-icons/fa'
-import routes from './routes'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link';
+import { useState } from 'react';
+import { FaEye, FaEyeSlash, FaLock } from 'react-icons/fa';
+import routes from './routes';
+import { useRouter } from 'next/navigation';
+import { useSnackbar, SnackbarProvider } from 'notistack';
+import axios from 'axios';
 
-export default function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useRouter().push;
+function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Login attempt:', { email, password })
-    if (email === 'admin@gmail.com' && password === 'admin') {
-      return navigate(routes.admin)
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(`${backendUrl}/auth/login`, {
+        email,
+        password,
+      });
+
+      const { token, role } = response.data;
+      console.log(response.data);
+
+      // Guardar el token en localStorage
+      localStorage.setItem('authToken', token);
+
+      // Mostrar mensaje de éxito
+      enqueueSnackbar('Inicio de sesión exitoso.', { variant: 'success' });
+
+      // Redirigir según el rol del usuario
+      switch (role) {
+        case 'admin':
+          router.push(routes.admin);
+          break;
+        case 'moderator':
+          router.push(routes.moderator);
+          break;
+        default:
+          router.push(routes.circuito);
+      }
+    } catch (error) {
+      // Manejo de errores
+      const errorMessage =
+        error.response?.data?.message || 'Error al iniciar sesión. Verifica tus credenciales.';
+      enqueueSnackbar(errorMessage, { variant: 'error' });
     }
-
-    if (email === 'mod@gmail.com' && password === 'mod') {
-      return navigate(routes.moderator)
-    }
-
-    return navigate(routes.circuito)
-  }
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 px-4 sm:px-6 lg:px-8">
@@ -63,7 +91,7 @@ export default function LoginForm() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -90,18 +118,6 @@ export default function LoginForm() {
           </Link>
 
           <div className="flex flex-col">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Recuérdame
-              </label>
-            </div>
-
             <Link href={routes.register} className="text-sm text-indigo-600 hover:text-indigo-500 mt-2">
               ¿No tienes cuenta? ¡Regístrate!
             </Link>
@@ -119,5 +135,13 @@ export default function LoginForm() {
         </form>
       </section>
     </main>
-  )
+  );
+}
+
+export default function Login() {
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <LoginForm />
+    </SnackbarProvider>
+  );
 }

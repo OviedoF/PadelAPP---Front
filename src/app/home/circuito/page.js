@@ -1,97 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaTrophy, FaCalendarAlt, FaMapMarkerAlt, FaMedal, FaChevronDown, FaChevronUp, FaMars, FaVenus, FaEnvelope, FaWhatsapp, FaTimes } from 'react-icons/fa'
 import Nav from '../Navbar'
-
-// Datos de ejemplo para el circuito
-const circuitoData = {
-  categorias: [
-    {
-      nombre: "Grand Slam",
-      puntos: 2000,
-      premios: "1.000.000 €",
-      torneos: [
-        {
-          id: 1,
-          nombre: "Gran Slam Madrid",
-          fecha: "2024-05-10",
-          ubicacion: "Madrid",
-          categoria: "Grand Slam",
-          genero: "masculino",
-          division: "Primera",
-          email: "granslam.madrid@example.com",
-          whatsapp: "+34123456789",
-          descripcion: "El torneo más prestigioso del circuito, con los mejores jugadores compitiendo por el título más codiciado."
-        }
-      ]
-    },
-    {
-      nombre: "Master",
-      puntos: 1000,
-      premios: "500.000 €",
-      torneos: [
-        {
-          id: 2,
-          nombre: "Master Barcelona",
-          fecha: "2024-06-15",
-          ubicacion: "Barcelona",
-          categoria: "Master",
-          genero: "femenino",
-          division: "Segunda",
-          email: "master.barcelona@example.com",
-          whatsapp: "+34987654321",
-          descripcion: "Un torneo de alto nivel que reúne a las mejores jugadoras en una competición intensa y emocionante."
-        }
-      ]
-    },
-    {
-      nombre: "Open",
-      puntos: 500,
-      premios: "250.000 €",
-      torneos: [
-        {
-          id: 3,
-          nombre: "Open Sevilla",
-          fecha: "2024-07-01",
-          ubicacion: "Sevilla",
-          categoria: "Open",
-          genero: "masculino",
-          division: "Tercera",
-          email: "open.sevilla@example.com",
-          whatsapp: "+34567891234",
-          descripcion: "Un torneo abierto que ofrece grandes oportunidades para jugadores emergentes y establecidos por igual."
-        }
-      ]
-    },
-    {
-      nombre: "Challenger",
-      puntos: 250,
-      premios: "100.000 €",
-      torneos: [
-        {
-          id: 4,
-          nombre: "Challenger Valencia",
-          fecha: "2024-07-15",
-          ubicacion: "Valencia",
-          categoria: "Challenger",
-          genero: "femenino",
-          division: "Primera",
-          email: "challenger.valencia@example.com",
-          whatsapp: "+34432187654",
-          descripcion: "Un torneo desafiante que pone a prueba las habilidades de las jugadoras en ascenso."
-        }
-      ]
-    },
-  ]
-}
+import axios from 'axios'
 
 export default function Circuito() {
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [expandedCategory, setExpandedCategory] = useState(null)
   const [selectedGender, setSelectedGender] = useState('todos')
   const [selectedDivision, setSelectedDivision] = useState('todas')
   const [selectedTorneo, setSelectedTorneo] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [circuitoData, setCircuitoData] = useState({
+    categorias: []
+  })
 
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category)
@@ -114,6 +37,23 @@ export default function Circuito() {
         (selectedDivision === 'todas' || torneo.division === selectedDivision)
     )
   }
+
+  const getTournaments = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/tournament/circuito`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+      setCircuitoData(response.data);
+    } catch (error) {
+      console.error('Error fetching tournaments:', error);
+    }
+  };
+
+  useEffect(() => {
+    getTournaments();
+  }, []);
 
   return (
     <>
@@ -210,14 +150,10 @@ export default function Circuito() {
                                   {torneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
                                   {torneo.genero.charAt(0).toUpperCase() + torneo.genero.slice(1)}
                                 </p>
-                                <p className="text-gray-600 flex items-center">
-                                  <FaMedal className="mr-2 text-cyan-500" />
-                                  {categoria.puntos} puntos
-                                </p>
-                                <p className="text-gray-600 flex items-center">
+                                {/* <p className="text-gray-600 flex items-center">
                                   <FaTrophy className="mr-2 text-cyan-500" />
                                   {categoria.premios}
-                                </p>
+                                </p> */}
                               </div>
                             ))}
                           </div>

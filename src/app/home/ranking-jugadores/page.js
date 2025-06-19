@@ -1,47 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaMedal, FaSearch, FaChevronDown, FaChevronUp, FaMars, FaVenus } from 'react-icons/fa'
 import Nav from '../Navbar'
-
-// Datos de ejemplo para el ranking de jugadores con género añadido
-const rankingData = [
-    {
-        categoria: "Primera",
-        jugadores: [
-            { id: 1, nombre: "Juan Pérez", puntos: 1500, club: "Padel Pro Madrid", genero: "masculino" },
-            { id: 2, nombre: "María García", puntos: 1450, club: "Barcelona Stars", genero: "femenino" },
-            { id: 3, nombre: "Carlos Rodríguez", puntos: 1400, club: "Valencia Aces", genero: "masculino" },
-            { id: 4, nombre: "Laura Martínez", puntos: 1350, club: "Sevilla Smash", genero: "femenino" },
-            { id: 5, nombre: "Antonio López", puntos: 1300, club: "Málaga Padel Club", genero: "masculino" },
-        ]
-    },
-    {
-        categoria: "Segunda",
-        jugadores: [
-            { id: 6, nombre: "Ana Sánchez", puntos: 1200, club: "Zaragoza Padel", genero: "femenino" },
-            { id: 7, nombre: "David Fernández", puntos: 1150, club: "Bilbao Padel Pro", genero: "masculino" },
-            { id: 8, nombre: "Elena Castro", puntos: 1100, club: "Vigo Padel Club", genero: "femenino" },
-            { id: 9, nombre: "Javier Ruiz", puntos: 1050, club: "Alicante Padel", genero: "masculino" },
-            { id: 10, nombre: "Sofía Moreno", puntos: 1000, club: "Granada Padel Club", genero: "femenino" },
-        ]
-    },
-    {
-        categoria: "Tercera",
-        jugadores: [
-            { id: 11, nombre: "Pablo Jiménez", puntos: 900, club: "Murcia Padel Team", genero: "masculino" },
-            { id: 12, nombre: "Isabel Torres", puntos: 850, club: "Córdoba Padel Pro", genero: "femenino" },
-            { id: 13, nombre: "Miguel Ángel Vega", puntos: 800, club: "Santander Beach Padel", genero: "masculino" },
-            { id: 14, nombre: "Carmen Ortiz", puntos: 750, club: "Valladolid Padel Open", genero: "femenino" },
-            { id: 15, nombre: "Roberto Díaz", puntos: 700, club: "Gijón Padel Masters", genero: "masculino" },
-        ]
-    }
-]
+import { useSnackbar } from 'notistack'
+import axios from 'axios'
 
 export default function RankingJugadores() {
     const [searchTerm, setSearchTerm] = useState('')
     const [expandedCategory, setExpandedCategory] = useState("Primera")
-    const [genderFilter, setGenderFilter] = useState('masculino')
+    const [genderFilter, setGenderFilter] = useState('male')
+    const [rankingData, setRankingData] = useState([])
+    const { enqueueSnackbar } = useSnackbar();
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
+    const getPlayers = async () => {
+        try {
+            const response = await axios.get(`${backendUrl}/player/ranking?genre=${genderFilter}&name=${searchTerm}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            setRankingData(response.data);
+        } catch (error) {
+            const errorMessage =
+                error.response?.data?.message || 'Error al obtener los jugadores. Inténtalo de nuevo.';
+            enqueueSnackbar(errorMessage, { variant: 'error' });
+        }
+    };
 
     const toggleCategory = (category) => {
         if (expandedCategory === category) {
@@ -55,13 +41,16 @@ export default function RankingJugadores() {
         ...categoria,
         jugadores: categoria.jugadores.map((jugador, index) => ({
             ...jugador,
-            posicion: index + 1, // Mantener posición original
             visible:
                 (genderFilter === 'todos' || jugador.genero === genderFilter) &&
                 (jugador.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     jugador.club.toLowerCase().includes(searchTerm.toLowerCase())),
         })),
     }));
+
+    useEffect(() => {
+        getPlayers();
+    }, [genderFilter, searchTerm]);
 
     return (
         <>
@@ -87,14 +76,14 @@ export default function RankingJugadores() {
                                 </div>
                                 <div className="flex justify-center space-x-4">
                                     <button
-                                        className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'masculino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        onClick={() => setGenderFilter('masculino')}
+                                        className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'male' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                        onClick={() => setGenderFilter('male')}
                                     >
                                         <FaMars className="mr-2" /> Masculino
                                     </button>
                                     <button
-                                        className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'femenino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                                        onClick={() => setGenderFilter('femenino')}
+                                        className={`px-4 py-2 rounded-md flex items-center ${genderFilter === 'female' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                        onClick={() => setGenderFilter('female')}
                                     >
                                         <FaVenus className="mr-2" /> Femenino
                                     </button>
@@ -135,12 +124,12 @@ export default function RankingJugadores() {
                                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                                     <div className="flex items-center">
                                                                         <FaMedal className={`mr-2 ${jugador.posicion === 1
-                                                                                ? 'text-yellow-400'
-                                                                                : jugador.posicion === 2
-                                                                                    ? 'text-gray-400'
-                                                                                    : jugador.posicion === 3
-                                                                                        ? 'text-yellow-700'
-                                                                                        : 'text-gray-400'
+                                                                            ? 'text-yellow-400'
+                                                                            : jugador.posicion === 2
+                                                                                ? 'text-gray-400'
+                                                                                : jugador.posicion === 3
+                                                                                    ? 'text-yellow-700'
+                                                                                    : 'text-gray-400'
                                                                             }`} />
                                                                         <span className="text-sm font-medium text-gray-900">{jugador.posicion}</span>
                                                                     </div>
@@ -156,7 +145,7 @@ export default function RankingJugadores() {
                                                                 </td>
                                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                                     <div className="text-sm text-gray-500 flex items-center">
-                                                                        {jugador.genero === 'masculino' ? (
+                                                                        {jugador.genero === 'male' ? (
                                                                             <><FaMars className="mr-1 text-blue-500" /> Masculino</>
                                                                         ) : (
                                                                             <><FaVenus className="mr-1 text-pink-500" /> Femenino</>

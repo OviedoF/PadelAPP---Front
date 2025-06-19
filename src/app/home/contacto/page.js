@@ -1,31 +1,8 @@
 'use client'
-
-import { useState } from 'react'
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'
 import Nav from '../Navbar'
 
 export default function Contacto() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-    })
-
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setFormData(prevState => ({ ...prevState, [name]: value }))
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // Here you would typically send the form data to your backend
-        console.log('Form submitted:', formData)
-        // Reset form after submission
-        setFormData({ name: '', email: '', subject: '', message: '' })
-        alert('Mensaje enviado. Gracias por contactarnos!')
-    }
-
     return (
         <>
             <Nav />
@@ -40,55 +17,55 @@ export default function Contacto() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
                                     <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Envíanos un mensaje</h2>
-                                    <form onSubmit={handleSubmit} className="space-y-4">
+                                    <form
+                                        action="https://formsubmit.co/oviedofederico39@gmail.com"
+                                        method="POST"
+                                        className="space-y-4"
+                                    >
                                         <div>
                                             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
                                             <input
                                                 type="text"
                                                 id="name"
                                                 name="name"
-                                                value={formData.name}
-                                                onChange={handleChange}
                                                 required
                                                 className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
+
                                         <div>
                                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                                             <input
                                                 type="email"
                                                 id="email"
                                                 name="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
                                                 required
                                                 className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
+
                                         <div>
                                             <label htmlFor="subject" className="block text-sm font-medium text-gray-700">Asunto</label>
                                             <input
                                                 type="text"
                                                 id="subject"
                                                 name="subject"
-                                                value={formData.subject}
-                                                onChange={handleChange}
                                                 required
                                                 className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
+
                                         <div>
                                             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Mensaje</label>
                                             <textarea
                                                 id="message"
                                                 name="message"
                                                 rows={4}
-                                                value={formData.message}
-                                                onChange={handleChange}
                                                 required
                                                 className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             ></textarea>
                                         </div>
+
                                         <div>
                                             <button
                                                 type="submit"
@@ -97,7 +74,14 @@ export default function Contacto() {
                                                 Enviar mensaje
                                             </button>
                                         </div>
+
+                                        {/* Opcional: evitar el captcha de FormSubmit */}
+                                        <input type="hidden" name="_captcha" value="false" />
+
+                                        {/* Opcional: redireccionar luego del envío */}
+                                        <input type="hidden" name="_next" value="https://google.com" />
                                     </form>
+
                                 </div>
 
                                 <div>
