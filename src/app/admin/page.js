@@ -1,17 +1,44 @@
 'use client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaBuilding, FaTrophy, FaUserCog, FaSearch } from 'react-icons/fa'
 import routes from '../routes'
 import Clubes from './Clubes'
 import Admins from './Admins'
 import Categories from './Categories'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export default function SuperAdminPanel() {
   const [activeTab, setActiveTab] = useState('clubs')
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useRouter().push
+
+  const getRole = async () => {
+    try {
+      const token = localStorage.getItem('authToken')
+      if (!token) return navigate(routes.login)
+
+      const response = await axios.post(`${backendUrl}/auth/isAdmin`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.data.role === "admin") {
+        navigate(routes.login)
+      }
+    } catch (error) {
+      console.error('Error fetching role:', error)
+      navigate(routes.login)
+    }
+  }
+
+  useEffect(() => {
+    getRole()
+  }, [])
 
   return (
     <main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12 text-gray-900">
@@ -77,7 +104,7 @@ export default function SuperAdminPanel() {
           )}
 
           <div className='w-full flex justify-center'>
-            <Link href={routes.login}>
+            <Link href={routes.login} onClick={() => localStorage.removeItem('authToken')}>
               <button className="mt-8 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Cerrar Sesión
               </button>

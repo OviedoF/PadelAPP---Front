@@ -27,7 +27,6 @@ function LoginForm() {
       });
 
       const { token, role } = response.data;
-      console.log(response.data);
 
       // Guardar el token en localStorage
       localStorage.setItem('authToken', token);

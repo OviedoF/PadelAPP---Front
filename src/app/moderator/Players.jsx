@@ -183,7 +183,7 @@ export default function Players({ backendUrl, searchTerm }) {
                 <h3 className="font-semibold">{player.name}</h3>
                 <p className="text-sm text-gray-600">Edad: {player.age}</p>
                 <p className="text-sm text-gray-600">Género: {player.genre}</p>
-                <p className="text-sm text-gray-600">Club: {player.club?.name}</p>
+                <p className="text-sm text-gray-600">Club: {player?.club?.name || 'Sin club'}</p>
                 <p className="text-sm text-gray-600">Categoría: {player.category?.name}</p>
               </div>
               <div className="flex space-x-2">

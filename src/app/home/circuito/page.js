@@ -33,8 +33,7 @@ export default function Circuito() {
   const filteredTorneos = (torneos) => {
     return torneos.filter(
       torneo =>
-        (selectedGender === 'todos' || torneo.genero === selectedGender) &&
-        (selectedDivision === 'todas' || torneo.division === selectedDivision)
+        (selectedGender === 'todos' || torneo.genero === selectedGender) &
     )
   }
 
@@ -94,7 +93,7 @@ export default function Circuito() {
               </div>
 
               {/* Filtro por división */}
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Filtrar por división</h2>
                 <div className="flex space-x-4">
                   {["todas", "Primera", "Segunda", "Tercera"].map((division) => (
@@ -108,7 +107,7 @@ export default function Circuito() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               <section>
                 <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Categorías de Torneos</h2>

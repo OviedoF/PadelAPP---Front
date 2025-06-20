@@ -149,15 +149,6 @@ export default function Tournaments({ backendUrl, searchTerm }) {
                         onChange={(e) => setNewTournament({ ...newTournament, location: e.target.value })}
                     />
                     <select
-                        className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                        value={newTournament.division}
-                        onChange={(e) => setNewTournament({ ...newTournament, division: e.target.value })}
-                    >
-                        <option value="Primera">Primera</option>
-                        <option value="Segunda">Segunda</option>
-                        <option value="Tercera">Tercera</option>
-                    </select>
-                    <select
                         value={newTournament.category}
                         onChange={(e) => setNewTournament({ ...newTournament, category: e.target.value })}
                         className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
@@ -286,7 +277,6 @@ export default function Tournaments({ backendUrl, searchTerm }) {
                                 }</p>
                                 <p className="text-sm text-gray-600">Género: {tournament.gender}</p>
                                 <p className="text-sm text-gray-600">Ubicación: {tournament.location}</p>
-                                <p className="text-sm text-gray-600">División: {tournament.division}</p>
                                 <p className="text-sm text-gray-600">Categoría: {tournament.category.name}</p>
                             </div>
                             <div>
@@ -356,15 +346,6 @@ export default function Tournaments({ backendUrl, searchTerm }) {
                                 setEditingTournament({ ...editingTournament, location: e.target.value })
                             }
                         />
-                        <select
-                            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                            value={editingTournament.division}
-                            onChange={(e) => setEditingTournament({ ...editingTournament, division: e.target.value })}
-                        >
-                            <option value="Primera">Primera</option>
-                            <option value="Segunda">Segunda</option>
-                            <option value="Tercera">Tercera</option>
-                        </select>
                         <select
                             value={editingTournament.category}
                             onChange={(e) => setEditingTournament({ ...editingTournament, category: e.target.value })}
