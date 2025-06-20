@@ -33,7 +33,7 @@ export default function Circuito() {
   const filteredTorneos = (torneos) => {
     return torneos.filter(
       torneo =>
-        (selectedGender === 'todos' || torneo.genero === selectedGender) &
+        (selectedGender === 'todos' || torneo.genero === selectedGender)
     )
   }
 
