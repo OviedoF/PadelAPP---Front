@@ -158,15 +158,18 @@ export default function TorneosResultados() {
         <>
             <Nav />
 
-            <main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-                <div className="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-                    <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <main className="min-h-screen bg-gray-100 py-6 px-4 flex flex-col justify-center sm:py-12">
+                <div className="relative py-3 w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+
+                    {/* Fondo decorativo solo desktop */}
+                    <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+
+                    <div className="relative px-4 py-10 bg-white shadow-lg rounded-xl sm:rounded-3xl sm:p-20">
                         <div className="max-w-4xl mx-auto">
-                            <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Resultados de Torneos</h1>
+                            <h1 className="text-2xl sm:text-4xl font-bold text-center text-gray-900 mb-8">Resultados de Torneos</h1>
 
                             <div className="mb-6 flex flex-col sm:flex-row gap-4">
-                                <div className="relative flex-grow">
+                                <div className="relative w-full">
                                     <input
                                         type="text"
                                         placeholder="Buscar torneo..."
@@ -176,7 +179,8 @@ export default function TorneosResultados() {
                                     />
                                     <FaSearch className="absolute right-3 top-3 text-gray-400" />
                                 </div>
-                                <div className="relative w-1/3">
+
+                                <div className="relative w-full sm:w-1/3">
                                     <select
                                         className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none"
                                         value={generoFilter}
@@ -197,7 +201,7 @@ export default function TorneosResultados() {
                                         className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
                                         onClick={() => setSelectedTorneo(torneo)}
                                     >
-                                        <h2 className="text-xl font-semibold mb-2 text-cyan-600">{torneo.nombre}</h2>
+                                        <h2 className="text-lg sm:text-xl font-semibold mb-2 text-cyan-600">{torneo.nombre}</h2>
                                         <p className="text-gray-600 flex items-center mb-1">
                                             <FaCalendarAlt className="mr-2 text-cyan-500" />
                                             {new Date(torneo.fecha).toLocaleDateString()}
@@ -218,10 +222,9 @@ export default function TorneosResultados() {
                                 ))}
                             </div>
 
-
                             {selectedTorneo && (
-                                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-                                    <div className="relative bg-white rounded-lg shadow-xl p-8 m-4 max-w-2xl w-full">
+                                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                                    <div className="relative bg-white rounded-lg shadow-xl p-6 sm:p-8 m-4 max-w-2xl w-full">
                                         <button
                                             className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
                                             onClick={() => setSelectedTorneo(null)}
@@ -231,23 +234,19 @@ export default function TorneosResultados() {
                                             </svg>
                                         </button>
 
-                                        <h2 className="text-2xl font-bold mb-6 text-cyan-600">{selectedTorneo.nombre}</h2>
+                                        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-cyan-600">{selectedTorneo.nombre}</h2>
 
                                         {/* Tabs */}
-                                        <div className="flex mb-6 border-b">
+                                        <div className="flex flex-col sm:flex-row mb-6 border-b">
                                             <button
-                                                className={`flex items-center px-4 py-2 ${activeTab === 'overview'
-                                                    ? 'text-cyan-600 border-b-2 border-cyan-600'
-                                                    : 'text-gray-500'}`}
+                                                className={`flex items-center px-4 py-2 ${activeTab === 'overview' ? 'text-cyan-600 border-b-2 border-cyan-600' : 'text-gray-500'}`}
                                                 onClick={() => setActiveTab('overview')}
                                             >
                                                 <FaInfoCircle className="mr-2" />
                                                 Overview
                                             </button>
                                             <button
-                                                className={`flex items-center px-4 py-2 ${activeTab === 'resultados'
-                                                    ? 'text-cyan-600 border-b-2 border-cyan-600'
-                                                    : 'text-gray-500'}`}
+                                                className={`flex items-center px-4 py-2 ${activeTab === 'resultados' ? 'text-cyan-600 border-b-2 border-cyan-600' : 'text-gray-500'}`}
                                                 onClick={() => setActiveTab('resultados')}
                                             >
                                                 <FaListAlt className="mr-2" />
@@ -255,12 +254,11 @@ export default function TorneosResultados() {
                                             </button>
                                         </div>
 
-                                        {/* Overview Tab Content */}
                                         {activeTab === 'overview' && (
                                             <div className="space-y-4">
                                                 <div className="bg-gray-50 p-4 rounded-lg">
                                                     <h3 className="font-semibold text-lg mb-3 text-gray-800">Información General</h3>
-                                                    <div className="grid grid-cols-2 gap-4">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                         <div>
                                                             <p className="text-gray-600 flex items-center mb-2">
                                                                 <FaCalendarAlt className="mr-2 text-cyan-500" />
@@ -295,24 +293,16 @@ export default function TorneosResultados() {
                                                 <div className="bg-gray-50 p-4 rounded-lg">
                                                     <h3 className="font-semibold text-lg mb-3 text-gray-800">Horarios</h3>
                                                     <div className="space-y-2">
-                                                        <p className="text-sm">
-                                                            <span className="font-medium">Inicio del torneo:</span> 9:00 AM
-                                                        </p>
-                                                        <p className="text-sm">
-                                                            <span className="font-medium">Fase de grupos:</span> 9:00 AM - 2:00 PM
-                                                        </p>
-                                                        <p className="text-sm">
-                                                            <span className="font-medium">Eliminatorias:</span> 3:00 PM - 7:00 PM
-                                                        </p>
+                                                        <p className="text-sm"><span className="font-medium">Inicio del torneo:</span> 9:00 AM</p>
+                                                        <p className="text-sm"><span className="font-medium">Fase de grupos:</span> 9:00 AM - 2:00 PM</p>
+                                                        <p className="text-sm"><span className="font-medium">Eliminatorias:</span> 3:00 PM - 7:00 PM</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         )}
 
-
-                                        {/* Resultados Tab Content - Updated Design */}
                                         {activeTab === 'resultados' && (
-                                            <div className="space-y-4">
+                                            <div className="space-y-4 overflow-x-auto">
                                                 <div className="bg-gray-50 rounded-lg overflow-hidden">
                                                     <div className="flex justify-between items-center bg-gray-100 px-4 py-2">
                                                         <div className="font-semibold text-gray-700">{selectedTorneo.nombre}</div>
@@ -328,27 +318,20 @@ export default function TorneosResultados() {
                                                         <div key={index} className="border-t border-gray-200">
                                                             <div className="px-4 py-3">
                                                                 <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center">
-                                                                    {/* Equipo 1 */}
                                                                     <div className="flex items-center gap-2">
                                                                         <FaUserCircle className="text-cyan-500" />
                                                                         <span className="font-medium">{partido.equipo1.nombre}</span>
                                                                     </div>
 
-                                                                    {/* Resultados */}
                                                                     <div className="flex gap-2 justify-center min-w-[100px]">
                                                                         {partido.sets.map((set, setIndex) => (
                                                                             <div key={setIndex} className="flex gap-1">
-                                                                                <span className="w-6 text-center font-medium">
-                                                                                    {set.equipo1}
-                                                                                </span>
-                                                                                <span className="w-6 text-center font-medium">
-                                                                                    {set.equipo2}
-                                                                                </span>
+                                                                                <span className="w-6 text-center font-medium">{set.equipo1}</span>
+                                                                                <span className="w-6 text-center font-medium">{set.equipo2}</span>
                                                                             </div>
                                                                         ))}
                                                                     </div>
 
-                                                                    {/* Equipo 2 */}
                                                                     <div className="flex items-center gap-2 justify-end">
                                                                         <span className="font-medium">{partido.equipo2.nombre}</span>
                                                                         <FaUserCircle className="text-cyan-500" />
@@ -360,9 +343,7 @@ export default function TorneosResultados() {
 
                                                     <div className="flex justify-between items-center bg-gray-50 px-4 py-2 border-t border-gray-200">
                                                         <span className="text-xs text-gray-500">{selectedTorneo.hora} COMPLETED</span>
-                                                        <button className="text-xs text-cyan-600 hover:underline">
-                                                            MATCH STATS
-                                                        </button>
+                                                        <button className="text-xs text-cyan-600 hover:underline">MATCH STATS</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -370,7 +351,6 @@ export default function TorneosResultados() {
                                     </div>
                                 </div>
                             )}
-
                         </div>
                     </div>
                 </div>

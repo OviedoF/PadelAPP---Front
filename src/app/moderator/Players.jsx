@@ -222,6 +222,13 @@ export default function Players({ backendUrl, searchTerm }) {
               value={editPlayer.age}
               onChange={(e) => setEditPlayer({ ...editPlayer, age: e.target.value })}
             />
+            <input
+              type="number"
+              placeholder="Edad del jugador"
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+              value={editPlayer.points}
+              onChange={(e) => setEditPlayer({ ...editPlayer, points: e.target.value })}
+            />
             <select
               value={editPlayer.genre}
               onChange={(e) => setEditPlayer({ ...editPlayer, genre: e.target.value })}

@@ -7,16 +7,19 @@ export default function Contacto() {
         <>
             <Nav />
 
-            <main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-                <div className="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-                    <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <main className="min-h-screen bg-gray-100 py-6 px-4 flex flex-col justify-center sm:py-12">
+                <div className="relative py-3 w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+                    {/* Fondo decorativo solo en pantallas grandes */}
+                    <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+
+                    <div className="relative px-4 py-10 bg-white shadow-lg rounded-xl sm:rounded-3xl sm:p-20">
                         <div className="max-w-4xl mx-auto">
-                            <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Contacto</h1>
+                            <h1 className="text-2xl sm:text-4xl font-bold text-center text-gray-900 mb-8">Contacto</h1>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {/* Formulario */}
                                 <div>
-                                    <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Envíanos un mensaje</h2>
+                                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-cyan-600">Envíanos un mensaje</h2>
                                     <form
                                         action="https://formsubmit.co/oviedofederico39@gmail.com"
                                         method="POST"
@@ -29,7 +32,7 @@ export default function Contacto() {
                                                 id="name"
                                                 name="name"
                                                 required
-                                                className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
 
@@ -40,7 +43,7 @@ export default function Contacto() {
                                                 id="email"
                                                 name="email"
                                                 required
-                                                className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
 
@@ -51,7 +54,7 @@ export default function Contacto() {
                                                 id="subject"
                                                 name="subject"
                                                 required
-                                                className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             />
                                         </div>
 
@@ -62,7 +65,7 @@ export default function Contacto() {
                                                 name="message"
                                                 rows={4}
                                                 required
-                                                className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
+                                                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"
                                             ></textarea>
                                         </div>
 
@@ -75,18 +78,15 @@ export default function Contacto() {
                                             </button>
                                         </div>
 
-                                        {/* Opcional: evitar el captcha de FormSubmit */}
                                         <input type="hidden" name="_captcha" value="false" />
-
-                                        {/* Opcional: redireccionar luego del envío */}
                                         <input type="hidden" name="_next" value="https://google.com" />
                                     </form>
-
                                 </div>
 
+                                {/* Información de contacto */}
                                 <div>
-                                    <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Información de contacto</h2>
-                                    <div className="space-y-4">
+                                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-cyan-600">Información de contacto</h2>
+                                    <div className="space-y-4 text-sm sm:text-base">
                                         <p className="flex items-center text-gray-600">
                                             <FaMapMarkerAlt className="mr-2 text-cyan-500" />
                                             Calle Pádel, 123, Buenos Aires, Argentina
@@ -101,7 +101,7 @@ export default function Contacto() {
                                         </p>
                                     </div>
 
-                                    <h3 className="text-xl font-semibold mt-8 mb-4 text-cyan-600">Síguenos en redes sociales</h3>
+                                    <h3 className="text-lg sm:text-xl font-semibold mt-8 mb-4 text-cyan-600">Síguenos en redes sociales</h3>
                                     <div className="flex space-x-4">
                                         <a href="#" className="text-gray-400 hover:text-cyan-500">
                                             <FaFacebook size={24} />

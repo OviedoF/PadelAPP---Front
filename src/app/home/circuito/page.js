@@ -58,114 +58,115 @@ export default function Circuito() {
     <>
       <Nav />
 
-      <main className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-        <div className="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto w-1/2">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-          <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Circuito de Pádel</h1>
+<main className="min-h-screen bg-gray-100 py-6 px-4 flex flex-col justify-center sm:py-12">
+  <div className="relative py-3 w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+    
+    {/* Fondo decorativo sólo en desktop */}
+    <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+    
+    <div className="relative px-4 py-10 bg-white shadow-lg rounded-xl sm:rounded-3xl sm:p-20">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center text-gray-900 mb-8">Circuito de Pádel</h1>
 
-              <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Filtrar por género</h2>
-                <div className="flex space-x-4">
-                  <button
-                    className={`flex items-center px-4 py-2 rounded-full ${selectedGender === 'todos' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'
-                      }`}
-                    onClick={() => setSelectedGender('todos')}
-                  >
-                    Todos
-                  </button>
-                  <button
-                    className={`flex items-center px-4 py-2 rounded-full ${selectedGender === 'masculino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'
-                      }`}
-                    onClick={() => setSelectedGender('masculino')}
-                  >
-                    <FaMars className="mr-2" /> Masculino
-                  </button>
-                  <button
-                    className={`flex items-center px-4 py-2 rounded-full ${selectedGender === 'femenino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'
-                      }`}
-                    onClick={() => setSelectedGender('femenino')}
-                  >
-                    <FaVenus className="mr-2" /> Femenino
-                  </button>
-                </div>
-              </div>
-
-              {/* Filtro por división */}
-              {/* <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Filtrar por división</h2>
-                <div className="flex space-x-4">
-                  {["todas", "Primera", "Segunda", "Tercera"].map((division) => (
-                    <button
-                      key={division}
-                      className={`flex items-center px-4 py-2 rounded-full ${selectedDivision === division ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'
-                        }`}
-                      onClick={() => setSelectedDivision(division)}
-                    >
-                      {division.charAt(0).toUpperCase() + division.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div> */}
-
-              <section>
-                <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Categorías de Torneos</h2>
-                <div className="space-y-4">
-                  {circuitoData.categorias.map((categoria) => (
-                    <div key={categoria.nombre} className="bg-white rounded-lg shadow-md overflow-hidden">
-                      <button
-                        className="w-full px-6 py-4 text-left focus:outline-none"
-                        onClick={() => toggleCategory(categoria.nombre)}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-lg">{categoria.nombre}</span>
-                          {expandedCategory === categoria.nombre ? (
-                            <FaChevronUp className="text-cyan-500" />
-                          ) : (
-                            <FaChevronDown className="text-cyan-500" />
-                          )}
-                        </div>
-                      </button>
-                      {expandedCategory === categoria.nombre && (
-                        <div className="px-6 py-4 bg-gray-50">
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {filteredTorneos(categoria.torneos).map((torneo) => (
-                              <div
-                                key={torneo.id}
-                                className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
-                                onClick={() => openModal(torneo)}
-                              >
-                                <h4 className="font-bold text-lg mb-2">{torneo.nombre}</h4>
-                                <p className="text-gray-600 flex items-center mb-1">
-                                  <FaCalendarAlt className="mr-2 text-cyan-500" />
-                                  {new Date(torneo.fecha).toLocaleDateString()}
-                                </p>
-                                <p className="text-gray-600 flex items-center mb-1">
-                                  <FaMapMarkerAlt className="mr-2 text-cyan-500" />
-                                  {torneo.ubicacion}
-                                </p>
-                                <p className="text-gray-600 flex items-center">
-                                  {torneo.genero === 'masculino' ? <FaMars className="mr-2 text-cyan-500" /> : <FaVenus className="mr-2 text-cyan-500" />}
-                                  {torneo.genero.charAt(0).toUpperCase() + torneo.genero.slice(1)}
-                                </p>
-                                {/* <p className="text-gray-600 flex items-center">
-                                  <FaTrophy className="mr-2 text-cyan-500" />
-                                  {categoria.premios}
-                                </p> */}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </div>
+        {/* Filtro por género */}
+        <div className="mb-8">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-cyan-600">Filtrar por género</h2>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+            <button
+              className={`flex items-center justify-center px-4 py-2 rounded-full ${selectedGender === 'todos' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => setSelectedGender('todos')}
+            >
+              Todos
+            </button>
+            <button
+              className={`flex items-center justify-center px-4 py-2 rounded-full ${selectedGender === 'masculino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => setSelectedGender('masculino')}
+            >
+              <FaMars className="mr-2" /> Masculino
+            </button>
+            <button
+              className={`flex items-center justify-center px-4 py-2 rounded-full ${selectedGender === 'femenino' ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => setSelectedGender('femenino')}
+            >
+              <FaVenus className="mr-2" /> Femenino
+            </button>
           </div>
         </div>
-      </main>
+
+        {/* Filtro por división (comentado si no se usa) */}
+        {/*
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-cyan-600">Filtrar por división</h2>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+            {["todas", "Primera", "Segunda", "Tercera"].map((division) => (
+              <button
+                key={division}
+                className={`flex items-center justify-center px-4 py-2 rounded-full ${selectedDivision === division ? 'bg-cyan-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                onClick={() => setSelectedDivision(division)}
+              >
+                {division.charAt(0).toUpperCase() + division.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+        */}
+
+        {/* Sección de torneos */}
+        <section>
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-cyan-600">Categorías de Torneos</h2>
+          <div className="space-y-4">
+            {circuitoData.categorias.map((categoria) => (
+              <div key={categoria.nombre} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <button
+                  className="w-full px-6 py-4 text-left focus:outline-none"
+                  onClick={() => toggleCategory(categoria.nombre)}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-lg">{categoria.nombre}</span>
+                    {expandedCategory === categoria.nombre ? (
+                      <FaChevronUp className="text-cyan-500" />
+                    ) : (
+                      <FaChevronDown className="text-cyan-500" />
+                    )}
+                  </div>
+                </button>
+
+                {expandedCategory === categoria.nombre && (
+                  <div className="px-6 py-4 bg-gray-50">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {filteredTorneos(categoria.torneos).map((torneo) => (
+                        <div
+                          key={torneo.id}
+                          className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow flex flex-col"
+                          onClick={() => openModal(torneo)}
+                        >
+                          <h4 className="font-bold text-lg mb-2">{torneo.nombre}</h4>
+                          <p className="text-gray-600 flex items-center mb-1">
+                            <FaCalendarAlt className="mr-2 text-cyan-500" />
+                            {new Date(torneo.fecha).toLocaleDateString()}
+                          </p>
+                          <p className="text-gray-600 flex items-center mb-1">
+                            <FaMapMarkerAlt className="mr-2 text-cyan-500" />
+                            {torneo.ubicacion}
+                          </p>
+                          <p className="text-gray-600 flex items-center">
+                            {torneo.genero === 'masculino'
+                              ? <><FaMars className="mr-2 text-cyan-500" /> Masculino</>
+                              : <><FaVenus className="mr-2 text-cyan-500" /> Femenino</>}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
 
       {/* Modal */}
       {isModalOpen && selectedTorneo && (

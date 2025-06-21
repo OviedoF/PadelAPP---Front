@@ -10,7 +10,7 @@ export default function Matches({ backendUrl }) {
     const [tournaments, setTournaments] = useState([]);
     const [selectedTournament, setSelectedTournament] = useState('');
     const [newMatch, setNewMatch] = useState({
-        isTeamMatch: false,
+        isTeamMatch: true,
         players1: [],
         players2: [],
         scores1: '',
@@ -100,16 +100,6 @@ export default function Matches({ backendUrl }) {
 
             <div className="mb-6 p-4 border rounded bg-gray-100">
                 <h3 className="font-semibold text-lg mb-2">Nuevo Partido</h3>
-
-                <label className="flex items-center mb-2">
-                    <input
-                        type="checkbox"
-                        checked={newMatch.isTeamMatch}
-                        onChange={(e) => setNewMatch({ ...newMatch, isTeamMatch: e.target.checked, players1: [], players2: [] })}
-                        className="mr-2"
-                    />
-                    ¿Partido en equipos?
-                </label>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {/* Selección de jugadores lado 1 */}
@@ -244,19 +234,6 @@ export default function Matches({ backendUrl }) {
                 <section className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded w-full max-w-xl">
                         <h3 className="text-xl font-semibold mb-4">Editar Partido</h3>
-
-                        {/* Checkbox modo equipos */}
-                        <label className="flex items-center mb-2">
-                            <input
-                                type="checkbox"
-                                checked={editMatch.isTeamMatch}
-                                onChange={(e) =>
-                                    setEditMatch({ ...editMatch, isTeamMatch: e.target.checked, players1: [], players2: [] })
-                                }
-                                className="mr-2"
-                            />
-                            ¿Partido en equipos?
-                        </label>
 
                         {/* Players */}
                         <div className="grid grid-cols-2 gap-2">
